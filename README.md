@@ -72,23 +72,64 @@ For each configured vehicle, the following sensors are created:
 
 ## Events
 
-The integration fires `rca_expiring_soon` events when the policy is within the configured warning threshold. This can be used in automations:
+The integration fires `rca_expiring_soon` events when the policy is within the configured warning threshold. Event data includes:
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `plate` | Vehicle registration number | `B123ABC` |
+| `days_remaining` | Days until policy expires | `12` |
+| `valid_to` | Policy end date | `24.07.2026` |
+| `insurer` | Insurance company name | `Groupama Asigurari` |
+
+### Automation Example — Push Notification
+
+Create the following automation to receive a push notification on your phone when an RCA policy is about to expire. Replace `notify.mobile_app_your_phone` with your actual mobile app entity (find it under **Settings** > **Devices & Services** > **Mobile App**).
 
 ```yaml
-automation:
-  - alias: "RCA Expiry Warning"
-    trigger:
-      - platform: event
-        event_type: rca_expiring_soon
-    action:
-      - service: notify.mobile_app
-        data:
-          title: "RCA Expiring Soon"
-          message: >-
-            RCA for {{ trigger.event.data.plate }} expires in
-            {{ trigger.event.data.days_remaining }} days
-            ({{ trigger.event.data.valid_to }})
+alias: "Monitor RCA Expiring Soon"
+description: >-
+  Trimite notificare push cand polita RCA este pe cale sa expire.
+  Se declanseaza de evenimentul rca_expiring_soon emis de integrarea RCA.
+mode: single
+max_exceeded: silent
+
+triggers:
+  - trigger: event
+    event_type: rca_expiring_soon
+
+condition: []
+
+actions:
+  - action: notify.mobile_app_your_phone
+    data:
+      title: "RCA expira curand!"
+      message: >-
+        Polita RCA pentru {{ trigger.event.data.plate }} expira
+        in {{ trigger.event.data.days_remaining }} zile
+        ({{ trigger.event.data.valid_to }}).
+        Asigurator: {{ trigger.event.data.insurer }}.
+      data:
+        push:
+          sound: default
+          interruption-level: time-sensitive
 ```
+
+### Testing the Notification
+
+You can test the automation without waiting for an actual RCA check:
+
+1. Go to **Developer Tools** > **Events**
+2. Enter event type: `rca_expiring_soon`
+3. Enter event data:
+   ```json
+   {
+     "plate": "B123ABC",
+     "days_remaining": 10,
+     "valid_to": "24.07.2026",
+     "insurer": "Groupama Asigurari"
+   }
+   ```
+4. Click **Fire Event** — you should receive a push notification immediately
 
 ## Browser Service Setup
 
