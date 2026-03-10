@@ -1,0 +1,36 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configure RCA Insurance Check",
+        "description": "Enter the vehicle registration plate number to check RCA policy validity via AIDA (aida.info.ro).",
+        "data": {
+          "plate": "Plate Number (e.g. B123ABC)",
+          "search_type": "Search Type",
+          "browser_service_url": "Browser Service URL",
+          "update_interval": "Update interval (seconds)",
+          "warning_days": "Expiry warning threshold (days)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to the RCA browser service. Verify the service URL and that the service is running."
+    },
+    "abort": {
+      "already_configured": "This vehicle plate is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "RCA Insurance Check Options",
+        "description": "Configure options for the RCA integration.",
+        "data": {
+          "browser_service_url": "Browser Service URL",
+          "update_interval": "Update interval (seconds)",
+          "warning_days": "Expiry warning threshold (days)"
+        }
+      }
+    }
+  }
+}

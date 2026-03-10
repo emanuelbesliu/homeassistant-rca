@@ -1,0 +1,16 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "python",
+      "package-name": "rca",
+      "include-component-in-tag": false,
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "custom_components/rca/manifest.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    }
+  }
+}

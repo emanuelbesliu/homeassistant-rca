@@ -1,0 +1,121 @@
+# RCA Insurance Check for Home Assistant
+
+[![HACS Validation](https://github.com/emanuelbesliu/homeassistant-rca/actions/workflows/validate.yml/badge.svg)](https://github.com/emanuelbesliu/homeassistant-rca/actions/workflows/validate.yml)
+[![Release](https://img.shields.io/github/v/release/emanuelbesliu/homeassistant-rca)](https://github.com/emanuelbesliu/homeassistant-rca/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Home Assistant custom integration for checking Romanian car insurance (RCA) policy validity via [AIDA](https://www.aida.info.ro/) (Autoritatea de Supraveghere Financiara).
+
+## Features
+
+- Check RCA policy validity for any Romanian-registered vehicle
+- Search by registration plate number or VIN/chassis number
+- Sensors for policy status, validity dates, insurer name, and days remaining
+- Configurable update interval (1 hour to 7 days, default: 24 hours)
+- Expiry warning events fired when policy is nearing expiration
+- Support for multiple vehicles via multiple config entries
+- Romanian and English translations
+
+## Architecture
+
+This integration requires a companion **rca-browser** microservice that handles the AIDA website interaction (including reCAPTCHA solving via audio challenge and OCR extraction of policy details from anti-scraping images).
+
+```
+Home Assistant  --->  rca-browser microservice  --->  aida.info.ro
+  (this integration)     (browser-service/)            (AIDA website)
+```
+
+The browser microservice is included in this repository under `browser-service/` and is deployed as a Docker container on Kubernetes.
+
+## Prerequisites
+
+- Home Assistant 2024.1.0 or newer
+- Running `rca-browser` microservice (see [Browser Service Setup](#browser-service-setup))
+
+## Installation
+
+### HACS (Recommended)
+
+1. Open HACS in Home Assistant
+2. Click the three dots menu (top right) > **Custom repositories**
+3. Add `https://github.com/emanuelbesliu/homeassistant-rca` with category **Integration**
+4. Search for "RCA Insurance Check" and install
+5. Restart Home Assistant
+
+### Manual
+
+1. Copy the `custom_components/rca` directory to your Home Assistant `config/custom_components/` directory
+2. Restart Home Assistant
+
+## Configuration
+
+1. Go to **Settings** > **Devices & Services** > **Add Integration**
+2. Search for "RCA Insurance Check"
+3. Enter:
+   - **Plate Number**: Vehicle registration number (e.g., `B123ABC`)
+   - **Search Type**: Registration Number or VIN/Chassis Number
+   - **Browser Service URL**: URL of the rca-browser microservice
+   - **Update Interval**: How often to check (in seconds, default: 86400 = 24h)
+   - **Expiry Warning Days**: Fire warning event when this many days remain (default: 30)
+
+## Sensors
+
+For each configured vehicle, the following sensors are created:
+
+| Sensor | Description | Example Value |
+|--------|-------------|---------------|
+| `sensor.rca_{plate}_has_policy` | Whether a valid RCA policy exists | `Yes` / `No` |
+| `sensor.rca_{plate}_valid_from` | Policy start date | `2025-07-25` |
+| `sensor.rca_{plate}_valid_to` | Policy end date | `2026-07-24` |
+| `sensor.rca_{plate}_insurer` | Insurance company name | `ZAD "DallBogg: Zhivot I Zdrave" AD` |
+| `sensor.rca_{plate}_days_remaining` | Days until policy expires | `365` |
+
+## Events
+
+The integration fires `rca_expiring_soon` events when the policy is within the configured warning threshold. This can be used in automations:
+
+```yaml
+automation:
+  - alias: "RCA Expiry Warning"
+    trigger:
+      - platform: event
+        event_type: rca_expiring_soon
+    action:
+      - service: notify.mobile_app
+        data:
+          title: "RCA Expiring Soon"
+          message: >-
+            RCA for {{ trigger.event.data.plate }} expires in
+            {{ trigger.event.data.days_remaining }} days
+            ({{ trigger.event.data.valid_to }})
+```
+
+## Browser Service Setup
+
+The `rca-browser` microservice is a Docker container that runs Chromium with nodriver to interact with the AIDA website. It solves reCAPTCHA v2 via audio challenge and uses Tesseract OCR to extract policy details from anti-scraping images.
+
+### Kubernetes Deployment
+
+```bash
+kubectl apply -f infra/rca-browser.yaml
+```
+
+The service runs on port 8194 by default. See `infra/rca-browser.yaml` for the full deployment manifest.
+
+### Docker (Manual)
+
+```bash
+docker build -t rca-browser browser-service/
+docker run -d -p 8194:8194 --name rca-browser rca-browser
+```
+
+### Health Check
+
+```bash
+curl http://localhost:8194/health
+# {"status": "ok"}
+```
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.

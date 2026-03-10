@@ -1,0 +1,36 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurare Verificare Asigurare RCA",
+        "description": "Introduceți numărul de înmatriculare al vehiculului pentru a verifica valabilitatea poliței RCA prin AIDA (aida.info.ro).",
+        "data": {
+          "plate": "Număr de înmatriculare (ex. B123ABC)",
+          "search_type": "Tip căutare",
+          "browser_service_url": "URL serviciu browser",
+          "update_interval": "Interval actualizare (secunde)",
+          "warning_days": "Prag avertizare expirare (zile)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nu se poate conecta la serviciul browser RCA. Verificați URL-ul și că serviciul rulează."
+    },
+    "abort": {
+      "already_configured": "Acest vehicul este deja configurat."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opțiuni Verificare RCA",
+        "description": "Configurați opțiunile pentru integrarea RCA.",
+        "data": {
+          "browser_service_url": "URL serviciu browser",
+          "update_interval": "Interval actualizare (secunde)",
+          "warning_days": "Prag avertizare expirare (zile)"
+        }
+      }
+    }
+  }
+}
