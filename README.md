@@ -157,6 +157,12 @@ curl http://localhost:8194/health
 # {"status": "ok"}
 ```
 
+## ☕ Support the Developer
+
+If you find this project useful, consider buying me a coffee!
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/emanuelbesliu)
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
