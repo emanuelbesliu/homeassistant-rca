@@ -3,6 +3,7 @@
 [![HACS Validation](https://github.com/emanuelbesliu/homeassistant-rca/actions/workflows/validate.yml/badge.svg)](https://github.com/emanuelbesliu/homeassistant-rca/actions/workflows/validate.yml)
 [![Release](https://img.shields.io/github/v/release/emanuelbesliu/homeassistant-rca)](https://github.com/emanuelbesliu/homeassistant-rca/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/emanuelbesliu)
 
 Home Assistant custom integration for checking Romanian car insurance (RCA) policy validity via [AIDA](https://www.aida.info.ro/) (Autoritatea de Supraveghere Financiara).
 
