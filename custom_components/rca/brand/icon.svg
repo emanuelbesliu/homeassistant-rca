@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Background circle - green for insurance/protection -->
+  <circle cx="128" cy="128" r="120" fill="#2E7D32"/>
+
+  <!-- Car silhouette - white -->
+  <!-- Car body -->
+  <path d="M 56 158 L 60 134 Q 62 128 68 126 L 82 120 Q 88 108 96 100 L 120 88 Q 128 86 148 86 L 172 92 Q 182 98 188 110 L 196 122 Q 202 126 204 132 L 206 158" fill="white" stroke="none"/>
+  <!-- Car roof/cabin -->
+  <path d="M 90 120 L 104 94 Q 108 88 118 88 L 150 88 Q 160 88 168 96 L 184 120 Z" fill="#2E7D32"/>
+  <!-- Windshield divider -->
+  <line x1="136" y1="88" x2="134" y2="120" stroke="white" stroke-width="2"/>
+
+  <!-- Car undercarriage -->
+  <rect x="54" y="156" width="154" height="16" rx="4" fill="white"/>
+
+  <!-- Wheel wells (cut-outs in green) -->
+  <circle cx="96" cy="170" r="22" fill="#2E7D32"/>
+  <circle cx="170" cy="170" r="22" fill="#2E7D32"/>
+
+  <!-- Wheels - white rims -->
+  <circle cx="96" cy="170" r="16" fill="white"/>
+  <circle cx="96" cy="170" r="8" fill="#2E7D32"/>
+  <circle cx="170" cy="170" r="16" fill="white"/>
+  <circle cx="170" cy="170" r="8" fill="#2E7D32"/>
+
+  <!-- Shield overlay - centered upper area -->
+  <path d="M 128 42 L 160 54 Q 166 56 166 62 L 166 88 Q 166 108 148 120 L 128 132 L 108 120 Q 90 108 90 88 L 90 62 Q 90 56 96 54 Z" fill="white" opacity="0.9"/>
+
+  <!-- Checkmark inside shield -->
+  <polyline points="108,82 122,98 150,66" stroke="#2E7D32" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
