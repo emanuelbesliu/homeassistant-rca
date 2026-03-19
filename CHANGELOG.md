@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/emanuelbesliu/homeassistant-rca/compare/v0.3.0...v0.4.0) (2026-03-19)
+
+
+### Features
+
+* replace warning_days with configurable expiry alert presets ([6832fd4](https://github.com/emanuelbesliu/homeassistant-rca/commit/6832fd4a773df97036225cdeb03d013d9acf3f5d))
+
 ## [0.3.0](https://github.com/emanuelbesliu/homeassistant-rca/compare/v0.2.0...v0.3.0) (2026-03-18)
 
 
