@@ -5,7 +5,6 @@ from typing import Any
 import voluptuous as vol
 
 from homeassistant import config_entries
-from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 
 from .api import RcaBrowserApi, RcaBrowserApiError
@@ -15,14 +14,18 @@ from .const import (
     CONF_SEARCH_TYPE,
     CONF_BROWSER_SERVICE_URL,
     CONF_UPDATE_INTERVAL,
-    CONF_WARNING_DAYS,
+    CONF_ALERT_PRESET,
     DEFAULT_BROWSER_SERVICE_URL,
     DEFAULT_UPDATE_INTERVAL,
-    DEFAULT_WARNING_DAYS,
+    DEFAULT_ALERT_PRESET,
     MIN_UPDATE_INTERVAL,
     MAX_UPDATE_INTERVAL,
     SEARCH_TYPE_PLATE,
     SEARCH_TYPE_VIN,
+    ALERT_PRESET_CONSERVATIVE,
+    ALERT_PRESET_STANDARD,
+    ALERT_PRESET_MINIMAL,
+    ALERT_PRESET_OFF,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -65,9 +68,6 @@ class RcaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         CONF_UPDATE_INTERVAL: user_input.get(
                             CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL
                         ),
-                        CONF_WARNING_DAYS: user_input.get(
-                            CONF_WARNING_DAYS, DEFAULT_WARNING_DAYS
-                        ),
                     },
                 )
 
@@ -93,10 +93,6 @@ class RcaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Coerce(int),
                     vol.Range(min=MIN_UPDATE_INTERVAL, max=MAX_UPDATE_INTERVAL),
                 ),
-                vol.Optional(
-                    CONF_WARNING_DAYS,
-                    default=DEFAULT_WARNING_DAYS,
-                ): vol.All(vol.Coerce(int), vol.Range(min=1, max=365)),
             }
         )
 
@@ -107,7 +103,6 @@ class RcaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
     @staticmethod
-    @callback
     def async_get_options_flow(
         config_entry: config_entries.ConfigEntry,
     ) -> config_entries.OptionsFlow:
@@ -137,12 +132,19 @@ class RcaOptionsFlowHandler(config_entries.OptionsFlow):
                 CONF_BROWSER_SERVICE_URL, DEFAULT_BROWSER_SERVICE_URL
             ),
         )
-        current_warning_days = self.config_entry.options.get(
-            CONF_WARNING_DAYS,
+        current_alert_preset = self.config_entry.options.get(
+            CONF_ALERT_PRESET,
             self.config_entry.data.get(
-                CONF_WARNING_DAYS, DEFAULT_WARNING_DAYS
+                CONF_ALERT_PRESET, DEFAULT_ALERT_PRESET
             ),
         )
+
+        alert_preset_options = {
+            ALERT_PRESET_CONSERVATIVE: "Conservative (60, 30, 14, 7 days + daily)",
+            ALERT_PRESET_STANDARD: "Standard (30, 14, 7 days + daily)",
+            ALERT_PRESET_MINIMAL: "Minimal (7 days + daily)",
+            ALERT_PRESET_OFF: "Off",
+        }
 
         options_schema = vol.Schema(
             {
@@ -158,9 +160,9 @@ class RcaOptionsFlowHandler(config_entries.OptionsFlow):
                     vol.Range(min=MIN_UPDATE_INTERVAL, max=MAX_UPDATE_INTERVAL),
                 ),
                 vol.Optional(
-                    CONF_WARNING_DAYS,
-                    default=current_warning_days,
-                ): vol.All(vol.Coerce(int), vol.Range(min=1, max=365)),
+                    CONF_ALERT_PRESET,
+                    default=current_alert_preset,
+                ): vol.In(alert_preset_options),
             }
         )
 

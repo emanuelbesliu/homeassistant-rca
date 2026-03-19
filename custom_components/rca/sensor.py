@@ -26,7 +26,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up RCA sensors from a config entry."""
-    coordinator: RcaDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: RcaDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     plate = entry.data[CONF_PLATE]
 
     entities = [

@@ -8,8 +8,7 @@
           "plate": "Număr de înmatriculare (ex. B123ABC)",
           "search_type": "Tip căutare",
           "browser_service_url": "URL serviciu browser",
-          "update_interval": "Interval actualizare (secunde)",
-          "warning_days": "Prag avertizare expirare (zile)"
+          "update_interval": "Interval actualizare (secunde)"
         }
       }
     },
@@ -28,7 +27,10 @@
         "data": {
           "browser_service_url": "URL serviciu browser",
           "update_interval": "Interval actualizare (secunde)",
-          "warning_days": "Prag avertizare expirare (zile)"
+          "alert_preset": "Alerte expirare"
+        },
+        "data_description": {
+          "alert_preset": "Când să primiți alerte despre expirarea poliței"
         }
       }
     }

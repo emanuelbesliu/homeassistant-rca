@@ -18,12 +18,9 @@ from .const import (
     CONF_SEARCH_TYPE,
     CONF_BROWSER_SERVICE_URL,
     CONF_UPDATE_INTERVAL,
-    CONF_WARNING_DAYS,
     DEFAULT_BROWSER_SERVICE_URL,
     DEFAULT_UPDATE_INTERVAL,
-    DEFAULT_WARNING_DAYS,
     SEARCH_TYPE_PLATE,
-    EVENT_RCA_EXPIRING_SOON,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -50,30 +47,12 @@ class RcaDataUpdateCoordinator(DataUpdateCoordinator):
             entry.data.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL),
         )
 
-        self._warning_days: int = entry.options.get(
-            CONF_WARNING_DAYS,
-            entry.data.get(CONF_WARNING_DAYS, DEFAULT_WARNING_DAYS),
-        )
-
-        # Track whether we already fired the expiring-soon event this cycle
-        self._last_event_fired_for: str | None = None
-
         super().__init__(
             hass,
             _LOGGER,
             name=f"{DOMAIN}_{self.plate}",
             update_interval=timedelta(seconds=update_interval),
         )
-
-    @property
-    def warning_days(self) -> int:
-        """Return the current expiry warning threshold."""
-        return self._warning_days
-
-    @warning_days.setter
-    def warning_days(self, value: int) -> None:
-        """Set a new expiry warning threshold."""
-        self._warning_days = value
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch RCA data from the browser microservice."""
@@ -88,9 +67,6 @@ class RcaDataUpdateCoordinator(DataUpdateCoordinator):
             raise UpdateFailed(f"Unexpected error: {err}") from err
 
         parsed = self._parse_response(raw)
-
-        # Fire expiry warning event if applicable
-        self._check_expiry_warning(parsed)
 
         return parsed
 
@@ -130,7 +106,7 @@ class RcaDataUpdateCoordinator(DataUpdateCoordinator):
         if valid_to_str:
             try:
                 valid_to = datetime.strptime(valid_to_str, "%d.%m.%Y").date()
-                days_remaining = max(0, (valid_to - now.date()).days)
+                days_remaining = (valid_to - now.date()).days
             except ValueError:
                 _LOGGER.warning("Could not parse valid_to: %s", valid_to_str)
 
@@ -143,31 +119,3 @@ class RcaDataUpdateCoordinator(DataUpdateCoordinator):
             "plate": self.plate,
             "last_update": now.isoformat(),
         }
-
-    def _check_expiry_warning(self, data: dict[str, Any]) -> None:
-        """Fire an event if the RCA policy is expiring within the warning threshold."""
-        if not data.get("has_policy"):
-            return
-
-        days = data.get("days_remaining", 0)
-        expiry_key = data.get("valid_to", "")
-
-        if days <= self._warning_days and expiry_key:
-            # Only fire once per expiry date to avoid spamming
-            if self._last_event_fired_for != expiry_key:
-                self._last_event_fired_for = expiry_key
-                self.hass.bus.async_fire(
-                    EVENT_RCA_EXPIRING_SOON,
-                    {
-                        "plate": self.plate,
-                        "days_remaining": days,
-                        "valid_to": expiry_key,
-                        "insurer": data.get("insurer"),
-                    },
-                )
-                _LOGGER.info(
-                    "RCA for %s expiring in %d days (threshold: %d)",
-                    self.plate,
-                    days,
-                    self._warning_days,
-                )

@@ -8,8 +8,7 @@
           "plate": "Plate Number (e.g. B123ABC)",
           "search_type": "Search Type",
           "browser_service_url": "Browser Service URL",
-          "update_interval": "Update interval (seconds)",
-          "warning_days": "Expiry warning threshold (days)"
+          "update_interval": "Update interval (seconds)"
         }
       }
     },
@@ -28,7 +27,10 @@
         "data": {
           "browser_service_url": "Browser Service URL",
           "update_interval": "Update interval (seconds)",
-          "warning_days": "Expiry warning threshold (days)"
+          "alert_preset": "Expiry alerts"
+        },
+        "data_description": {
+          "alert_preset": "When to receive alerts about policy expiry"
         }
       }
     }
