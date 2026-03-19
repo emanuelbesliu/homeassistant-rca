@@ -13,7 +13,7 @@ Home Assistant custom integration for checking Romanian car insurance (RCA) poli
 - Search by registration plate number or VIN/chassis number
 - Sensors for policy status, validity dates, insurer name, and days remaining
 - Configurable update interval (1 hour to 7 days, default: 24 hours)
-- Expiry warning events fired when policy is nearing expiration
+- Configurable expiry alert presets (persistent notifications + HA events)
 - Support for multiple vehicles via multiple config entries
 - Romanian and English translations
 
@@ -57,7 +57,25 @@ The browser microservice is included in this repository under `browser-service/`
    - **Search Type**: Registration Number or VIN/Chassis Number
    - **Browser Service URL**: URL of the rca-browser microservice
    - **Update Interval**: How often to check (in seconds, default: 86400 = 24h)
-   - **Expiry Warning Days**: Fire warning event when this many days remain (default: 30)
+
+### Options
+
+After setup, go to the integration's **Configure** to adjust:
+
+- **Browser Service URL**: Change the microservice endpoint
+- **Update Interval**: How often to check the policy
+- **Expiry Alerts**: Choose an alert preset for policy expiry notifications
+
+#### Alert Presets
+
+| Preset | Alerts at | Daily alerts |
+|--------|-----------|--------------|
+| Conservative | 60, 30, 14, 7 days before expiry | Below 7 days |
+| **Standard** (default) | 30, 14, 7 days before expiry | Below 7 days |
+| Minimal | 7 days before expiry | Below 7 days |
+| Off | No alerts | No alerts |
+
+Alerts are delivered as both **persistent notifications** (visible in the HA notification panel) and **`rca_expiring_soon` events** (for automations).
 
 ## Sensors
 
@@ -73,7 +91,7 @@ For each configured vehicle, the following sensors are created:
 
 ## Events
 
-The integration fires `rca_expiring_soon` events when the policy is within the configured warning threshold. Event data includes:
+The integration fires `rca_expiring_soon` events based on the configured alert preset. Event data includes:
 
 | Field | Description | Example |
 |-------|-------------|---------|
