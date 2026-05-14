@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/emanuelbesliu/homeassistant-rca/compare/v0.5.0...v0.6.0) (2026-05-14)
+
+
+### Features
+
+* add arm64 platform to browser service Docker build ([7098424](https://github.com/emanuelbesliu/homeassistant-rca/commit/7098424dc06b75f603a5ba0371040b757c750dd1))
+
 ## [0.5.0](https://github.com/emanuelbesliu/homeassistant-rca/compare/v0.4.0...v0.5.0) (2026-03-19)
 
 
