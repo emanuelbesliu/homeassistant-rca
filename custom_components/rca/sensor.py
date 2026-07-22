@@ -102,6 +102,8 @@ class RcaHasPolicySensor(RcaBaseSensor):
         return {
             "plate": self._plate,
             "insurer": data.get("insurer"),
+            "reference_date": data.get("reference_date"),
+            "starts_in_future": data.get("starts_in_future"),
             "last_update": data.get("last_update"),
         }
 

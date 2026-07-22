@@ -34,5 +34,29 @@
         }
       }
     }
+  },
+  "services": {
+    "check_policy": {
+      "name": "Check policy",
+      "description": "Check RCA policy validity for a vehicle on a specific date (today or a future date). Returns the policy result and can remember an upcoming policy until its start date is reached.",
+      "fields": {
+        "plate": {
+          "name": "Plate / VIN",
+          "description": "Registration number or VIN to check. Defaults to the configured vehicle when only one is set up."
+        },
+        "search_type": {
+          "name": "Search type",
+          "description": "Whether the value is a registration number or a VIN."
+        },
+        "date": {
+          "name": "Reference date",
+          "description": "Date to check validity for (today or a future date). Defaults to today."
+        },
+        "remember": {
+          "name": "Remember upcoming policy",
+          "description": "If the future date returns a policy for a configured plate, reflect it in the sensors on every poll until the date is reached."
+        }
+      }
+    }
   }
 }

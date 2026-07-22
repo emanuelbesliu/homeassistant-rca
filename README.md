@@ -150,6 +150,49 @@ You can test the automation without waiting for an actual RCA check:
    ```
 4. Click **Fire Event** — you should receive a push notification immediately
 
+## Actions
+
+### `rca.check_policy`
+
+Check RCA validity for a plate on a specific date — including a **future date**, as supported by AIDA. This is useful when you buy a policy that starts in the future: today's check reports no active policy, but a future-date check shows the upcoming one.
+
+The action returns the policy result (usable via `response_variable`). When you pass a future `date` and a policy is found for a **configured** plate, the integration **remembers** that date and reflects the upcoming policy in the sensors on every poll until the date is reached — after which it reverts to normal today-based polling automatically.
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `plate` | No | Registration number or VIN. Defaults to the configured vehicle when only one is set up. |
+| `search_type` | No | `numar` (registration number) or `serie` (VIN). Defaults to the configured value. |
+| `date` | No | Date to check (today or future, `YYYY-MM-DD`). Defaults to today. |
+| `remember` | No | Keep reflecting an upcoming future-dated policy in the sensors until its date is reached. Default `true`. |
+
+#### Example — check an upcoming policy
+
+```yaml
+action: rca.check_policy
+data:
+  plate: IS04AYA
+  date: "2026-09-05"
+response_variable: rca_result
+```
+
+Returned `rca_result`:
+
+```json
+{
+  "has_policy": true,
+  "valid_from": "2026-07-25",
+  "valid_to": "2027-07-24",
+  "insurer": "Groupama Asigurari SA",
+  "days_remaining": 367,
+  "plate": "IS04AYA",
+  "reference_date": "2026-09-05",
+  "starts_in_future": true,
+  "last_update": "2026-07-22T08:40:00"
+}
+```
+
+The `sensor.rca_{plate}_has_policy` entity also exposes `reference_date` and `starts_in_future` attributes so you can tell when the reported policy is an upcoming one rather than currently active.
+
 ## Browser Service Setup
 
 The `rca-browser` microservice is a Docker container that runs Chromium with nodriver to interact with the AIDA website. It solves reCAPTCHA v2 via audio challenge and uses Tesseract OCR to extract policy details from anti-scraping images.

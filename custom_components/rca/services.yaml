@@ -1,0 +1,46 @@
+check_policy:
+  name: Check policy
+  description: >-
+    Check RCA policy validity for a vehicle on a specific date (today or a
+    future date, as supported by AIDA). Returns the policy result. When a
+    future date returns an upcoming policy for a configured plate, the
+    integration remembers it and reflects it in the sensors on every poll
+    until that date is reached.
+  fields:
+    plate:
+      name: Plate / VIN
+      description: >-
+        Registration number or VIN to check. Defaults to the configured
+        vehicle when only one is set up.
+      required: false
+      example: "IS04AYA"
+      selector:
+        text:
+    search_type:
+      name: Search type
+      description: Whether the value above is a registration number or a VIN.
+      required: false
+      selector:
+        select:
+          options:
+            - label: Registration Number
+              value: numar
+            - label: VIN / Chassis Number
+              value: serie
+    date:
+      name: Reference date
+      description: >-
+        Date to check validity for (today or a future date). Defaults to today.
+      required: false
+      selector:
+        date:
+    remember:
+      name: Remember upcoming policy
+      description: >-
+        If the reference date is in the future and a policy is found for a
+        configured plate, keep reflecting it in the sensors on every poll
+        until the date is reached.
+      required: false
+      default: true
+      selector:
+        boolean:
