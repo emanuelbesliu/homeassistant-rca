@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.0](https://github.com/emanuelbesliu/homeassistant-rca/compare/v0.5.0...v0.6.0) (2026-07-22)
+
+
+### Features
+
+* add arm64 platform to browser service Docker build ([7098424](https://github.com/emanuelbesliu/homeassistant-rca/commit/7098424dc06b75f603a5ba0371040b757c750dd1))
+* add check_policy action with future-date lookup ([0588e26](https://github.com/emanuelbesliu/homeassistant-rca/commit/0588e263686659d8fc8d14b987c9ad74675824ad))
+* add check_policy action with future-date lookup ([1e8a803](https://github.com/emanuelbesliu/homeassistant-rca/commit/1e8a8038393fd8bad0b8b51b500c391cbe871ee8))
+
 ## [0.5.0](https://github.com/emanuelbesliu/homeassistant-rca/compare/v0.4.0...v0.5.0) (2026-03-19)
 
 
