@@ -34,5 +34,29 @@
         }
       }
     }
+  },
+  "services": {
+    "check_policy": {
+      "name": "Verifică polița",
+      "description": "Verifică valabilitatea poliței RCA pentru un vehicul la o dată anume (astăzi sau o dată viitoare). Returnează rezultatul și poate reține o poliță viitoare până la data de început.",
+      "fields": {
+        "plate": {
+          "name": "Număr / VIN",
+          "description": "Numărul de înmatriculare sau VIN de verificat. Implicit vehiculul configurat, dacă există unul singur."
+        },
+        "search_type": {
+          "name": "Tip căutare",
+          "description": "Dacă valoarea este număr de înmatriculare sau VIN."
+        },
+        "date": {
+          "name": "Dată de referință",
+          "description": "Data pentru care se verifică valabilitatea (astăzi sau o dată viitoare). Implicit astăzi."
+        },
+        "remember": {
+          "name": "Reține polița viitoare",
+          "description": "Dacă data viitoare returnează o poliță pentru un vehicul configurat, aceasta este reflectată în senzori la fiecare actualizare până la data respectivă."
+        }
+      }
+    }
   }
 }

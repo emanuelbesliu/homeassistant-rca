@@ -24,6 +24,19 @@ SEARCH_TYPE_VIN = "serie"
 # Events
 EVENT_RCA_EXPIRING_SOON = "rca_expiring_soon"
 
+# Services
+SERVICE_CHECK_POLICY = "check_policy"
+ATTR_PLATE = "plate"
+ATTR_SEARCH_TYPE = "search_type"
+ATTR_DATE = "date"
+ATTR_REMEMBER = "remember"
+
+# Future-date override persistence (Store)
+STORAGE_VERSION = 1
+STORAGE_KEY_OVERRIDE = "override"
+# AIDA reference date format (dd.mm.yyyy)
+AIDA_DATE_FORMAT = "%d.%m.%Y"
+
 # Alert preset configuration
 ALERT_PRESET_CONSERVATIVE = "conservative"
 ALERT_PRESET_STANDARD = "standard"
